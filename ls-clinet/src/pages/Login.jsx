@@ -1,11 +1,38 @@
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const {SignIn} = useContext(AuthContext)
     const handleLogin = event =>{
         event.preventDefault()
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email , password)
+        SignIn(email,password)
+      .then(result =>{
+        const user = result.user;
+        console.log(user)
+        Swal.fire({
+          title: "Log In SuccessFully Guys!",
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `
+          }
+        });
+      })
     }
     return (
         <div className="hero bg-base-200 min-h-screen">
@@ -38,6 +65,7 @@ const Login = () => {
           <button className="btn outline btn-primary">Login</button>
         </div>
       </form>
+      <p>New Here ? <Link className="text-xl text-orange-600" to={'/signUp'}>Create a Account </Link></p>
     </div>
   </div>
 </div>
