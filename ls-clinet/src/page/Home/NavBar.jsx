@@ -13,6 +13,7 @@ const NavBar = () => {
     const navS = <>
     <div className='space-x-10'>
     <Link to={'/'}>Home</Link>
+    <Link to={'/any'}>Any</Link>
     </div>
     
     </>
@@ -50,7 +51,8 @@ const NavBar = () => {
   </div>
   <div className="navbar-end">
   {
-      user ? <>
+      user ? <> 
+      <p>{user.displayName}</p>
       <button onClick={handleLogOut} className='btn btn-outline btn-warning'>Logout</button>
       </> : <> <Link to={'/login'}>Login</Link></>
     }
