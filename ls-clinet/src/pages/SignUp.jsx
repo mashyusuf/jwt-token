@@ -3,14 +3,14 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
-
+import useAxiosPublic from '../hooks/useAxiosPublic'
+import SocialLogin from "./SocialLogin";
 const SignUp = () => {
   const navigate = useNavigate()
     const { register ,handleSubmit,reset,formState: { errors }} = useForm();
     const {createUser,updateUserProfile} = useContext(AuthContext)
-
+  const axiosPublic = useAxiosPublic()
     const onSubmit = data => {
-      console.log(data);
       createUser(data.email, data.password)
           .then(result => {
               const loggedUser = result.user;
@@ -18,7 +18,18 @@ const SignUp = () => {
               return updateUserProfile(data.name, data.photoUrl);
           })
           .then(() => {
-              console.log("User profile updated");
+              //create user entry in the database---
+              const userInfo={
+                name: data.name,
+                email:data.email
+              }
+              axiosPublic.post('users',userInfo)
+              .then(res =>{
+                if(res.data.insertedId){
+                  console.log('user add the data bese' , userInfo)
+                }
+              })
+              
               reset();
               Swal.fire({
                   position: "center",
@@ -92,6 +103,7 @@ const SignUp = () => {
             </form>
            
             <p>Already SignUp ? <Link className="text-xl text-green-600" to={'/login'}>Login </Link></p>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
